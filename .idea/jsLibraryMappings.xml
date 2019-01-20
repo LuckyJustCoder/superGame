@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{@types/a11y-dialog, @types/angular-http-auth, @types/cookie-parser, @types/express, @types/express-mysql-session, @types/express-socket.io-session, @types/helmet, @types/jquery, @types/mysql, @types/server, @types/sha256, test}" />
+    <file url="PROJECT" libraries="{@types/a11y-dialog, @types/angular-http-auth, @types/cookie-parser, @types/express, @types/express-mysql-session, @types/express-socket.io-session, @types/helmet, @types/jquery, @types/mysql, @types/server, @types/sha256, @types/w3c-generic-sensor, @types/websocket, test}" />
     <includedPredefinedLibrary name="HTTP Response Handler" />
   </component>
 </project>
