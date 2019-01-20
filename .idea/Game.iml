@@ -20,5 +20,7 @@
     <orderEntry type="library" name="@types/mysql" level="application" />
     <orderEntry type="library" name="@types/server" level="application" />
     <orderEntry type="library" name="test" level="project" />
+    <orderEntry type="library" name="@types/w3c-generic-sensor" level="application" />
+    <orderEntry type="library" name="@types/websocket" level="application" />
   </component>
 </module>
