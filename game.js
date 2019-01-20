@@ -10,8 +10,16 @@ let connection = mysql.createConnection({
   password: config.Game.DataBase.password,
   database: config.Game.DataBase.database
 });
+let webSocketServer;
 
-connection.connect();
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log("[DB] => Connected");
+
+  webSocketServer = new WebSocketServer.Server({
+    port: config.Game.Game.port
+  });
+});
 
 // подключенные клиенты
 let clients = {};
@@ -37,10 +45,6 @@ let playerIsFold = 0;
 
 let SEATS = 5;
 let smallBlind = 10;
-
-let webSocketServer = new WebSocketServer.Server({
-  port: config.Game.Game.port
-});
 
 webSocketServer.on('connection', function(ws) {
   console.log("новое соединение");
