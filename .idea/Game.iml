@@ -11,5 +11,14 @@
     <orderEntry type="library" name="@types/express-mysql-session" level="application" />
     <orderEntry type="library" name="@types/sha256" level="application" />
     <orderEntry type="library" name="@types/angular-http-auth" level="application" />
+    <orderEntry type="library" name="@types/a11y-dialog" level="application" />
+    <orderEntry type="library" name="@types/cookie-parser" level="application" />
+    <orderEntry type="library" name="@types/express" level="application" />
+    <orderEntry type="library" name="@types/express-socket.io-session" level="application" />
+    <orderEntry type="library" name="@types/helmet" level="application" />
+    <orderEntry type="library" name="@types/jquery" level="application" />
+    <orderEntry type="library" name="@types/mysql" level="application" />
+    <orderEntry type="library" name="@types/server" level="application" />
+    <orderEntry type="library" name="test" level="project" />
   </component>
 </module>
