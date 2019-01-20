@@ -18,7 +18,7 @@ socket.onmessage = function(event) {
             socket.send( JSON.stringify({
                 type: "join-to-game",
                 seat: 0,
-                coins: 10
+                coins: 100
             }));
         }else{
             console.log("Ошибка!");
@@ -30,25 +30,26 @@ socket.onmessage = function(event) {
         $("#title_game_table").text("Стол: "+obg['cards-on-table']);
         $("#title_game_cards").text("Ваши карты: "+obg['my-cards']);
         $("#title_game_turn").text("Ход: "+obg['crt-player']);
+    }else if(obg.type==="your-turn"){
+        alert("Ваш ход!");
     }
 };
 
 $("#button_fold").click(function(){ // Сбросить
-    console.log("321");
     socket.send( JSON.stringify( {"type":"turn","turn-type": "fold", "coins": null}));
 });
-
-$("#btn-call").click(function(){ // Уровнять
+//Не btn а button
+$("#button_call").click(function(){ // Уровнять
     socket.send( JSON.stringify( {"type":"turn","turn-type": "coll", "coins": null}));
 });
 
-$("#btn-bet").click(function(){
-    if(/^[1-9]+$/.test($("inp-rise").val) && $("inp-rise").val > 0){
-        socket.send( JSON.stringify( {"type":"turn","turn-type": "rise", "coins": $("inp-rise").val}));
+$("#button_rise").click(function(){ // Поднять
+    if(/^[0-9]+$/.test($("#inp-rise").val()) && $("#inp-rise").val() > 0){
+        socket.send( JSON.stringify( {"type":"turn","turn-type": "rise", "coins": $("#inp-rise").val()}));
     }
 });
 
-$("#btn-check").click(function(){
+$("#button_check").click(function(){
     socket.send( JSON.stringify( {"type":"turn","turn-type": "check", "coins": null}));
 });
 
@@ -191,7 +192,7 @@ $('#button_save').click(function(){
         mode: 'same-origin',
         credentials: 'include',
         redirect: 'follow',
-        headers : { 
+        headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
@@ -246,7 +247,7 @@ function id(){
             $('#warp_authorization').animate({
                 marginTop: -500
             }, 700);
-            
+
             setTimeout(function(){
                 $("#warp_user").show();
             }, 300);

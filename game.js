@@ -10,15 +10,13 @@ let connection = mysql.createConnection({
     password: config.Game.DataBase.password,
     database: config.Game.DataBase.database
 });
-let webSocketServer;
+let webSocketServer = new WebSocketServer.Server({
+    port: config.Game.Game.port
+});
 
 connection.connect(function(err) {
     if (err) throw err;
     console.log("[DB] => Connected");
-
-    webSocketServer = new WebSocketServer.Server({
-        port: config.Game.Game.port
-    });
 });
 
 // подключенные клиенты
@@ -84,7 +82,7 @@ webSocketServer.on('connection', function(ws) {
         }else{
             if (msg["type"] === "turn" && idPlayersTurns[crtPlayer] === id){
                 if (msg["turn-type"] === "rise"){
-                    rise(idPlayersTurns[crtPlayer],msg["coins"]);
+                    rise(idPlayersTurns[crtPlayer],parseInt(msg["coins"]));
                 }else if (msg["turn-type"] === "coll"){
                     coll(idPlayersTurns[crtPlayer]);
                 }else if (msg["turn-type"] === "check"){
@@ -93,6 +91,7 @@ webSocketServer.on('connection', function(ws) {
                     fold(idPlayersTurns[crtPlayer]);
                 }
                 idPlayersRound[crtPlayer]++;
+                console.log(idPlayersRound);
                 let prevPlayer = crtPlayer;
                 sendStatusGame();
                 nextCrtPlayer();
@@ -106,17 +105,21 @@ webSocketServer.on('connection', function(ws) {
                         idPlayersRound = 0;
                     }
                     crtRound++;
+                    crtBet = 0;
                     if(crtRound === 1){
                         cardsOnTable[0] = deck.shift();
                         cardsOnTable[1] = deck.shift();
                         cardsOnTable[2] = deck.shift();
+                        sendStatusGame();
                         invitePlayerToTurn(crtPlayer);
                     }else if(crtRound < 3){
                         cardsOnTable[crtRound+1] = deck.shift();
+                        sendStatusGame();
                         invitePlayerToTurn(crtPlayer);
                     }else{
                     }
                 }else{
+                    sendStatusGame();
                     invitePlayerToTurn(crtPlayer);
                 }
             }
@@ -213,13 +216,14 @@ webSocketServer.on('connection', function(ws) {
                         }
 
                         //Начало префлопа
+                        sendStatusGame();
                         crtBet = smallBlind;
                         coll(idPlayersTurns[crtPlayer]);
                         idPlayersRound[crtPlayer]++;
                         sendStatusGame();
                         nextCrtPlayer();
 
-
+                        sendStatusGame();
                         crtBet = 2*smallBlind;
                         coll(idPlayersTurns[crtPlayer]);
                         idPlayersRound[crtPlayer]++;
@@ -294,14 +298,15 @@ function nextCrtPlayer(){
 }
 
 function fold(id){
-    idPlayersRound[crtPlayer]++;
+    //idPlayersRound[crtPlayer]++;
     let seat = clients[id][3];
     playersInGame[seat][3] = -1;
     playerIsFold++;
 }
 function coll(id){
-    idPlayersRound[crtPlayer]++;
+    //idPlayersRound[crtPlayer]++;
     let seat = clients[id][3];
+    console.log(crtBet);
     if (playersInGame[seat][1] > crtBet - crtBets[seat]){
         playersInGame[seat][1] -= crtBet - crtBets[seat];
         crtBets[seat] = crtBet;
@@ -313,16 +318,17 @@ function coll(id){
     }
 }
 function rise(id,coins){
-    idPlayersRound[crtPlayer]++;
+    //idPlayersRound[crtPlayer]++;
     let seat = clients[id][3];
-    if (playersInGame[seat][1] > coins + crtBets[seat]){
+    console.log(playersInGame[seat][1] > coins , coins + crtBets[seat] > crtBet);
+    if (playersInGame[seat][1] > coins && coins + crtBets[seat] > crtBet){
         crtBet = coins + crtBets[seat];
     }
     coll(id);
 }
 function check(id){
     let seat = clients[id][3];
-    idPlayersRound[crtPlayer]++;
+    //idPlayersRound[crtPlayer]++;
     if (crtBet !== crtBets[seat]){
         coll(id);
     }
