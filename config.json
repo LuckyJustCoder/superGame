@@ -1,16 +1,16 @@
 {
-  "Game": {
-    "DataBase": {
-      "host": "127.0.0.1",
-      "user": "root",
-      "password": "",
-      "database": "anime"
-    },
-    "Server":{
-      "port": 8050
-    },
     "Game": {
-      "port": 25565
+        "DataBase": {
+            "host": "127.0.0.1",
+            "user": "root",
+            "password": "",
+            "database": "anime"
+        },
+        "Server":{
+            "port": 8050
+        },
+        "Game": {
+            "port": 25565
+        }
     }
-  }
 }
