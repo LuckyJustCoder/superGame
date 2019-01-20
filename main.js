@@ -14,43 +14,43 @@ let connection = mysql.createConnection({
 connection.connect();
 
 // подключенные клиенты
-var clients = {};
-var crntId = 0;
+let clients = {};
+let crntId = 0;
 
-var isGame = false;
-var crtRound = -1;
+let isGame = false;
+let crtRound = -1;
 
-var playersInGame = [null,null,null,null,null]; //id,coins-in-game,cards,gameStatus
-var playerIsSeat = 0;
+let playersInGame = [null,null,null,null,null]; //id,coins-in-game,cards,gameStatus
+let playerIsSeat = 0;
 
-var crtPlayer = -1;
-var crtStavka = 0;
-var crtStavki = [0,0,0,0,0];
-var cardsOnTable = [-1,-1,-1,-1,-1];
-var vaBank = [0,0,0,0,0];
-var bank = 0;
-var coloda = [];
+let crtPlayer = -1;
+let crtStavka = 0;
+let crtStavki = [0,0,0,0,0];
+let cardsOnTable = [-1,-1,-1,-1,-1];
+let vaBank = [0,0,0,0,0];
+let bank = 0;
+let coloda = [];
 
-var idPlayersTurns = [];
-var idPlayersRound = [];
-var playerIsFold = 0;
+let idPlayersTurns = [];
+let idPlayersRound = [];
+let playerIsFold = 0;
 
-var SEATS = 5;
-var smallBlind = 10;
+let SEATS = 5;
+let smallBlind = 10;
 
-var webSocketServer = new WebSocketServer.Server({
+let webSocketServer = new WebSocketServer.Server({
   port: config.Game.Game.port
 });
 
 webSocketServer.on('connection', function(ws) {
   console.log("новое соединение");
-  var id = null;
-  var isAuthorization = false;
+  let id = null;
+  let isAuthorization = false;
 
   ws.on('message', function(message) {
     console.log('получено сообщение ' + message);
     console.log(playerIsSeat);
-    msg = JSON.parse(message);
+    let msg = JSON.parse(message);
     //Авторизация
     if(!isAuthorization){
       if(msg["type"] == "login"){
@@ -94,11 +94,11 @@ webSocketServer.on('connection', function(ws) {
         nextCrtPlayer();
         if (idPlayersRound[prevPlayer] === idPlayersRound[crtPlayer] &&
             crtStavki[clients[idPlayersTurns[prevPlayer]][3]] === crtStavki[clients[idPlayersTurns[crtPlayer]][3]]){
-          for(var i = 0; i < crtStavki.length; i++){
+          for(let i = 0; i < crtStavki.length; i++){
             bank += crtStavki[i];
             crtStavki[i] = 0;
           }
-          for(var i = 0; i < idPlayersRound.length;i++){
+          for(let i = 0; i < idPlayersRound.length;i++){
             idPlayersRound = 0;
           }
           crtRound++;
@@ -134,13 +134,13 @@ webSocketServer.on('connection', function(ws) {
       }
 
       if (msg["type"] == "join-to-game"){
-        var isAcc = false;
+        let isAcc = false;
         if(!isGame &&
           (msg["seat"] < SEATS && msg["seat"] > -1) &&
           (msg["coins"] > 0 && msg["coins"] <= clients[id][2]) &&
           (msg["seat"] != clients[id][3])){
 
-          var isFree = true;
+          let isFree = true;
           if(msg["seat"] > -1 && playersInGame[msg["seat"]] != null) isFree = false;
           if (!isFree){
             for(var i = 0; i < playersInGame.length;i++){
@@ -183,7 +183,7 @@ webSocketServer.on('connection', function(ws) {
             isGame = true;
             crtRound = 0;
             coloda = [];
-            for(var i = 0; i < 52; i++){
+            for(let i = 0; i < 52; i++){
               coloda.push(i);
             }
             coloda.sort(function(a,b) {
@@ -200,7 +200,7 @@ webSocketServer.on('connection', function(ws) {
             playerIsFold = 0;
             console.log(coloda)
             //Раздаем карты и генерируем очередь игроков
-            for(var i = 0; i < SEATS; i++){
+            for(let i = 0; i < SEATS; i++){
               if(playersInGame[i] != null){
                 playersInGame[i][2] = [coloda.shift(),coloda.shift()];
                 idPlayersTurns.push(playersInGame[i][0]);
@@ -323,10 +323,10 @@ function check(id){
   }
 }
 function sendStatusGame(){
-  for(var j = 0; j < idPlayersTurns.length;j++){
+  for(let j = 0; j < idPlayersTurns.length;j++){
     _id =  idPlayersTurns[j];
     res = [];
-    for(var i = 0; i < idPlayersTurns.length; i++){
+    for(let i = 0; i < idPlayersTurns.length; i++){
       res.push([clients[idPlayersTurns[i]][3], playersInGame[i][1]]);
     }
     let sendData = {
