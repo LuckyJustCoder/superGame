@@ -24,12 +24,12 @@ let playersInGame = [null,null,null,null,null]; //id,coins-in-game,cards,gameSta
 let playerIsSeat = 0;
 
 let crtPlayer = -1;
-let crtStavka = 0;
-let crtStavki = [0,0,0,0,0];
+let crtBet = 0;
+let crtBets = [0,0,0,0,0];
 let cardsOnTable = [-1,-1,-1,-1,-1];
 let vaBank = [0,0,0,0,0];
 let bank = 0;
-let coloda = [];
+let deck = [];
 
 let idPlayersTurns = [];
 let idPlayersRound = [];
@@ -53,14 +53,14 @@ webSocketServer.on('connection', function(ws) {
     let msg = JSON.parse(message);
     //Авторизация
     if(!isAuthorization){
-      if(msg["type"] == "login"){
-        connection.query('SELECT * FROM users WHERE login = ?',msg['login'], function(err, rows, fields) {
+      if(msg["type"] === "login"){
+        connection.query('SELECT * FROM users WHERE login = ?',msg['login'], function(err, rows) {
           if (err) throw err;
-          if (!(rows[0]['id'] in clients) && rows[0]['password'] == msg['password']){
+          if (!(rows[0]['id'] in clients) && rows[0]['password'] === msg['password']){
             id = rows[0]['id'];
             clients[id] = [ws,rows[0]['name'],rows[0]['coins'],-1];
 
-            sendData = {
+            let sendData = {
               "type":"login-status",
               "message": "ok"
             };
@@ -70,7 +70,7 @@ webSocketServer.on('connection', function(ws) {
           }
         });
       }else{
-        sendData = {
+        let sendData = {
           "type":"login-status",
           "message": "not"
         };
@@ -93,35 +93,34 @@ webSocketServer.on('connection', function(ws) {
         sendStatusGame();
         nextCrtPlayer();
         if (idPlayersRound[prevPlayer] === idPlayersRound[crtPlayer] &&
-            crtStavki[clients[idPlayersTurns[prevPlayer]][3]] === crtStavki[clients[idPlayersTurns[crtPlayer]][3]]){
-          for(let i = 0; i < crtStavki.length; i++){
-            bank += crtStavki[i];
-            crtStavki[i] = 0;
+            crtBets[clients[idPlayersTurns[prevPlayer]][3]] === crtBets[clients[idPlayersTurns[crtPlayer]][3]]){
+          for(let i = 0; i < crtBets.length; i++){
+            bank += crtBets[i];
+            crtBets[i] = 0;
           }
           for(let i = 0; i < idPlayersRound.length;i++){
             idPlayersRound = 0;
           }
           crtRound++;
-          if(crtRound == 1){
-            cardsOnTable[0] = coloda.shift();
-            cardsOnTable[1] = coloda.shift();
-            cardsOnTable[2] = coloda.shift();
-            ivitePlayerToTurn(crtPlayer);
+          if(crtRound === 1){
+            cardsOnTable[0] = deck.shift();
+            cardsOnTable[1] = deck.shift();
+            cardsOnTable[2] = deck.shift();
+            invitePlayerToTurn(crtPlayer);
           }else if(crtRound < 3){
-            cardsOnTable[crtRound+1] = coloda.shift();
-            ivitePlayerToTurn(crtPlayer);
+            cardsOnTable[crtRound+1] = deck.shift();
+            invitePlayerToTurn(crtPlayer);
           }else{
-
           }
         }else{
-          ivitePlayerToTurn(crtPlayer);
+          invitePlayerToTurn(crtPlayer);
         }
       }
 
       if (msg["type"] === "get-info"){
         if (msg['info'] === "online"){
           let res = [];
-          for (var key in clients){
+          for (let key in clients){
             res.push([key,clients[key][1],clients[key][2],clients[key][3]]);
           }
           let sendData = {
@@ -133,17 +132,17 @@ webSocketServer.on('connection', function(ws) {
         }
       }
 
-      if (msg["type"] == "join-to-game"){
+      if (msg["type"] === "join-to-game"){
         let isAcc = false;
         if(!isGame &&
           (msg["seat"] < SEATS && msg["seat"] > -1) &&
           (msg["coins"] > 0 && msg["coins"] <= clients[id][2]) &&
-          (msg["seat"] != clients[id][3])){
+          (msg["seat"] !== clients[id][3])){
 
           let isFree = true;
           if(msg["seat"] > -1 && playersInGame[msg["seat"]] != null) isFree = false;
           if (!isFree){
-            for(var i = 0; i < playersInGame.length;i++){
+            for(let i = 0; i < playersInGame.length;i++){
               if(playersInGame[i] == null){
                 isFree = true;
                 msg["seat"] = i;
@@ -152,7 +151,7 @@ webSocketServer.on('connection', function(ws) {
             }
           }
           if (isFree){
-            if(msg["seat"] != -1 && clients[id][3] == -1){
+            if(msg["seat"] !== -1 && clients[id][3] === -1){
               playersInGame[msg["seat"]] = [id,msg["coins"],[null,null],-1];
               clients[id][2] -= msg["coins"];
               clients[id][3] = msg["seat"];
@@ -162,7 +161,7 @@ webSocketServer.on('connection', function(ws) {
           }
 
 
-        }else if (msg["seat"] == -1 && clients[id][3] != -1) {
+        }else if (msg["seat"] === -1 && clients[id][3] !== -1) {
           //Нужна проверка на ход игры
 
           clients[id][2] += playersInGame[clients[id][3]][1];
@@ -172,37 +171,37 @@ webSocketServer.on('connection', function(ws) {
           playerIsSeat--;
         }
         if (isAcc){
-          sendData = {
+          let sendData = {
             "type":"join-to-game-status",
             "message": "ok",
             "seat": msg["seat"]
           };
           ws.send(JSON.stringify(sendData));
           //Начало неведомой херни. Этот игрок приглашает следующего на ход
-          if (playerIsSeat > 1 && isGame == false){
+          if (playerIsSeat > 1 && isGame === false){
             isGame = true;
             crtRound = 0;
-            coloda = [];
+            deck = [];
             for(let i = 0; i < 52; i++){
-              coloda.push(i);
+              deck.push(i);
             }
-            coloda.sort(function(a,b) {
+            deck.sort(function() {
               return Math.random() - 0.5;
             });
 
             crtPlayer = 0;
-            crtStavka = 0;
-            crtStavki = [0,0,0,0,0];
+            crtBet = 0;
+            crtBets = [0,0,0,0,0];
             cardsOnTable = [-1,-1,-1,-1,-1];
             vaBank = [0,0,0,0,0];
             bank = 0;
             idPlayersTurns = [];
             playerIsFold = 0;
-            console.log(coloda)
+            console.log(deck);
             //Раздаем карты и генерируем очередь игроков
             for(let i = 0; i < SEATS; i++){
               if(playersInGame[i] != null){
-                playersInGame[i][2] = [coloda.shift(),coloda.shift()];
+                playersInGame[i][2] = [deck.shift(),deck.shift()];
                 idPlayersTurns.push(playersInGame[i][0]);
                 idPlayersRound.push(0);
                 playersInGame[i][3] = 0;
@@ -210,24 +209,24 @@ webSocketServer.on('connection', function(ws) {
             }
 
             //Начало префлопа
-            crtStavka = smallBlind;
+            crtBet = smallBlind;
             coll(idPlayersTurns[crtPlayer]);
             idPlayersRound[crtPlayer]++;
             sendStatusGame();
             nextCrtPlayer();
 
 
-            crtStavka = 2*smallBlind;
+            crtBet = 2*smallBlind;
             coll(idPlayersTurns[crtPlayer]);
             idPlayersRound[crtPlayer]++;
             sendStatusGame();
             nextCrtPlayer();
 
             //Пригласить на ход следующего игрока
-            ivitePlayerToTurn(crtPlayer);
+            invitePlayerToTurn(crtPlayer);
           }
         }else{
-          sendData = {
+          let sendData = {
             "type":"join-to-game-status",
             "message": "not"
           };
@@ -246,9 +245,9 @@ webSocketServer.on('connection', function(ws) {
       playersInGame[clients[id][3]] = null;
       playerIsFold++;
     }
-    sql = "UPDATE users SET coins = ? WHERE id = ?";
-    data = [clients[id][2],id];
-    connection.query(sql,data,function(err, rows, fields) {
+    let sql = "UPDATE users SET coins = ? WHERE id = ?";
+    let data = [clients[id][2],id];
+    connection.query(sql,data,function(err) {
       if (err) throw err;
     });
     console.log('соединение закрыто ' + id);
@@ -257,12 +256,13 @@ webSocketServer.on('connection', function(ws) {
   });
 });
 
-function ivitePlayerToTurn(inviteTo) {
-  console.log("Я здесь")
-  let inviteRound = idPlayersRound[inviteTo];
-  if(playerIsFold == idPlayersTurns.length) gameStop();
+function invitePlayerToTurn(inviteTo) {
+  console.log("Я здесь");
+
+  //let inviteRound = idPlayersRound[inviteTo];
+  if(playerIsFold === idPlayersTurns.length) gameStop();
   else{
-    sendData = {
+    let sendData = {
       "type":"your-turn"
     };
     clients[idPlayersTurns[inviteTo]][0].send(JSON.stringify(sendData));
@@ -270,7 +270,7 @@ function ivitePlayerToTurn(inviteTo) {
       if (inviteRound == idPlayersRound[inviteTo]){
         fold(idPlayersTurns[crtPlayer]);
         nextCrtPlayer();
-        ivitePlayerToTurn(crtPlayer);
+        invitePlayerToTurn(crtPlayer);
       }
     }, 1000000);*/
   }
@@ -283,7 +283,7 @@ function gameStop(){
 function nextCrtPlayer(){
   crtPlayer++;
   crtPlayer%=idPlayersTurns.length;
-  while(playersInGame[clients[idPlayersTurns[crtPlayer]][3]][3] != 0 && playerIsFold < idPlayersTurns.length){
+  while(playersInGame[clients[idPlayersTurns[crtPlayer]][3]][3] !== 0 && playerIsFold < idPlayersTurns.length){
     crtPlayer++;
     crtPlayer%=idPlayersTurns.length;
   }
@@ -291,41 +291,42 @@ function nextCrtPlayer(){
 
 function fold(id){
   idPlayersRound[crtPlayer]++;
-  seat = clients[id][3];
+  let seat = clients[id][3];
   playersInGame[seat][3] = -1;
   playerIsFold++;
 }
 function coll(id){
   idPlayersRound[crtPlayer]++;
-  seat = clients[id][3];
-  if (playersInGame[seat][1] > crtStavka - crtStavki[seat]){
-    playersInGame[seat][1] -= crtStavka - crtStavki[seat];
-    crtStavki[seat] = crtStavka;
+  let seat = clients[id][3];
+  if (playersInGame[seat][1] > crtBet - crtBets[seat]){
+    playersInGame[seat][1] -= crtBet - crtBets[seat];
+    crtBets[seat] = crtBet;
   }else{
-    crtStavki[seat] += playersInGame[seat][1];
-    vaBank[seat] = crtStavki[seat];
+    crtBets[seat] += playersInGame[seat][1];
+    vaBank[seat] = crtBets[seat];
     playersInGame[seat][1] = 0;
     playersInGame[seat][3] = 1;
   }
 }
 function rise(id,coins){
   idPlayersRound[crtPlayer]++;
-  seat = clients[id][3];
-  if (playersInGame[seat][1] > coins + crtStavki[seat]){
-    crtStavka = coins + crtStavki[seat];
+  let seat = clients[id][3];
+  if (playersInGame[seat][1] > coins + crtBets[seat]){
+    crtBet = coins + crtBets[seat];
   }
   coll(id);
 }
 function check(id){
+  let seat = clients[id][3];
   idPlayersRound[crtPlayer]++;
-  if (crtStavka != crtStavki[seat]){
+  if (crtBet !== crtBets[seat]){
     coll(id);
   }
 }
 function sendStatusGame(){
   for(let j = 0; j < idPlayersTurns.length;j++){
-    _id =  idPlayersTurns[j];
-    res = [];
+    let _id =  idPlayersTurns[j];
+    let res = [];
     for(let i = 0; i < idPlayersTurns.length; i++){
       res.push([clients[idPlayersTurns[i]][3], playersInGame[i][1]]);
     }
@@ -333,7 +334,7 @@ function sendStatusGame(){
       "type":"situation",
       "cards-on-table":cardsOnTable,
       "bank": bank,
-      "crt-stavki": crtStavki,
+      "crt-stavki": crtBets,
       "players": res,
       "my-cards": playersInGame[clients[_id][3]][2],
       "crt-player": clients[idPlayersTurns[crtPlayer]][3]
