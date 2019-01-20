@@ -10,7 +10,6 @@ const helmet = require('helmet');
 const config = require('./config.json');
 
 app.use(helmet());
-//f#Egg9A34KlsOTE
 app.disable('x-powered-by');
 app.use(require("body-parser").json());
 app.use(express.static('public'));
