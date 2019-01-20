@@ -1,13 +1,16 @@
-var WebSocketServer = new require('ws'),
-    mysql = new require('mysql');
+const WebSocketServer = new require('ws');
+const mysql = new require('mysql');
+const config = require('./config.json');
 
 //База данных
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'Ctvt',
-  database: "db"
+
+let connection = mysql.createConnection({
+  host: config.Game.DataBase.host,
+  user: config.Game.DataBase.user,
+  password: config.Game.DataBase.password,
+  database: config.Game.DataBase.database
 });
+
 connection.connect();
 
 // подключенные клиенты
@@ -35,9 +38,8 @@ var playerIsFold = 0;
 var SEATS = 5;
 var smallBlind = 10;
 
-// WebSocket-сервер на порту 8081
 var webSocketServer = new WebSocketServer.Server({
-  port: 8081
+  port: config.Game.Game.port
 });
 
 webSocketServer.on('connection', function(ws) {
@@ -76,12 +78,12 @@ webSocketServer.on('connection', function(ws) {
         ws.close();
       }
     }else{
-      if (msg["type"] == "turn" && idPlayersTurns[crtPlayer] == id){
-        if (msg["turn-type"] == "rise"){
+      if (msg["type"] === "turn" && idPlayersTurns[crtPlayer] === id){
+        if (msg["turn-type"] === "rise"){
           rise(idPlayersTurns[crtPlayer],msg["coins"]);
-        }else if (msg["turn-type"] == "coll"){
+        }else if (msg["turn-type"] === "coll"){
           coll(idPlayersTurns[crtPlayer]);
-        }else if (msg["turn-type"] == "check"){
+        }else if (msg["turn-type"] === "check"){
           check(idPlayersTurns[crtPlayer]);
         }else{
           fold(idPlayersTurns[crtPlayer]);
@@ -90,8 +92,8 @@ webSocketServer.on('connection', function(ws) {
         let prevPlayer = crtPlayer;
         sendStatusGame();
         nextCrtPlayer();
-        if (idPlayersRound[prevPlayer] == idPlayersRound[crtPlayer] &&
-            crtStavki[clients[idPlayersTurns[prevPlayer]][3]] == crtStavki[clients[idPlayersTurns[crtPlayer]][3]]){
+        if (idPlayersRound[prevPlayer] === idPlayersRound[crtPlayer] &&
+            crtStavki[clients[idPlayersTurns[prevPlayer]][3]] === crtStavki[clients[idPlayersTurns[crtPlayer]][3]]){
           for(var i = 0; i < crtStavki.length; i++){
             bank += crtStavki[i];
             crtStavki[i] = 0;
@@ -116,13 +118,13 @@ webSocketServer.on('connection', function(ws) {
         }
       }
 
-      if (msg["type"] == "get-info"){
-        if (msg['info'] == "online"){
-          res = [];
+      if (msg["type"] === "get-info"){
+        if (msg['info'] === "online"){
+          let res = [];
           for (var key in clients){
             res.push([key,clients[key][1],clients[key][2],clients[key][3]]);
           }
-          sendData = {
+          let sendData = {
             "type": "set-info",
             "info": "online",
             "body": res
@@ -327,7 +329,7 @@ function sendStatusGame(){
     for(var i = 0; i < idPlayersTurns.length; i++){
       res.push([clients[idPlayersTurns[i]][3], playersInGame[i][1]]);
     }
-    sendData = {
+    let sendData = {
       "type":"situation",
       "cards-on-table":cardsOnTable,
       "bank": bank,

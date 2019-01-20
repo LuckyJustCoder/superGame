@@ -1,0 +1,118 @@
+#button_fold{
+    width: 150px;
+}
+#button_call{
+    width: 150px;
+}
+#button_check{
+    width: 150px;
+}
+#button_rise{
+    width: 150px;
+    position: absolute;
+    margin: -45px 180px;
+}
+#inp-rise{
+    width: 150px;
+    height: 45px;
+    position: absolute;
+    margin: -95px 180px;
+}
+#warp_user{
+    padding-top: 200px;
+    width: 250px;
+    height: 345px;
+    margin: 10px 20px;
+    position: absolute;
+}
+
+#warp_game{
+    width: 500px;
+    height: 500px;
+    padding-top: 215px;
+    margin: auto;
+}
+#wrp-table{
+    width: 1280px;
+    height: 720px;
+    margin: 160px auto;
+}
+#warp_authorization{
+	margin: 10px auto;
+	width: 500px;
+    height: 345px;
+    border-style: groove;
+    padding: 15px;
+    border-radius: 5px;     
+}
+#txt-hello{
+    padding-bottom: 10px;
+}
+#input_login{
+    padding-bottom: 10px;
+}
+
+#settings{
+    padding-top: 10px;
+    height: 10px;
+    width: 250px;
+    margin:0 auto;
+}
+#cb-reg{
+    padding-top: 0;
+    padding-right: 5px;
+    float: left;
+}
+#cb-auto-auth{
+    padding-top: 0;
+    padding-right: 5px;
+    float: left;
+}
+#txt-reg{
+    line-height: 3px; 
+    padding-top: 0;
+    padding-left: 3px;
+    float: left;
+    padding-right: 20px;
+}
+#txt-auto-auth{
+    line-height: 2px; 
+    padding-top: 0;
+    padding-left: 2px;
+    float: left;
+    padding-right: 20px;
+}
+#button_authorization{
+    margin-top: 50px;
+    height: 45;
+}
+#txt-error{
+
+}
+
+#title_game_turn {
+    margin-bottom: 0px;
+}
+
+#title_game_cards {
+    margin-bottom: 0px;
+}
+
+#title_game_table {
+    margin-bottom: 0px;
+}
+
+#title_game_bet {
+    margin-bottom: 0px;
+}
+
+#title_game_bank {
+    margin-bottom: 0px;
+}
+
+#title_coins {
+    margin-bottom: 0px;
+}
+
+#button_save {
+}
