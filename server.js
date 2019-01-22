@@ -18,6 +18,27 @@ app.use(function(req, res, next) {res.header("Access-Control-Allow-Origin", "*")
 app.use(session({secret: 'keyboard cat', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: true}));
 app.get('/', function(req, res) {res.sendFile(path.join(__dirname + '/index.html'));});
 
+app.get('/settings', function(request, response) {
+    let login = request.cookies['login'];
+    let session = request.cookies['session'];
+    con.query(`SELECT * FROM users WHERE login = ?`,[login], function (error, result) {
+        try{
+            if(error){
+                response.sendFile(path.join(__dirname + '/index.html'));
+                return false;
+            }
+            if(result[0].login !== login || result[0].session !== session){
+                res.sendFile(path.join(__dirname + '/index.html'));
+                return false;
+            }
+            response.sendFile(path.join(__dirname + '/public/settings.html'));
+        }catch (e) {
+            response.sendFile(path.join(__dirname + '/index.html'));
+            return false;
+        }
+    });
+});
+
 let con = mysql.createConnection({
     host: config.Game.DataBase.host,
     user: config.Game.DataBase.user,
@@ -63,7 +84,7 @@ app.post('/api/autoAuth', (request, response) => {
 
             let code = createCode();
             new Promise(function (resolve) {
-                con.query(`UPDATE users SET session = ? WHERE login = ?`, [code, login],function(){
+                con.query(`UPDATE users SET 'session' = ? WHERE ('login' = ?)`, [code, login],function(){
                     resolve(1);
                 });
             }).then(function () {
@@ -125,7 +146,7 @@ app.post('/api/registration', (request, response) => {
                             let code = createCode();
 
                             if(request.body.autojoin){
-                                con.query("UPDATE users SET session = ? WHERE login = ?",[code, result[0].login],function(){
+                                con.query(`UPDATE users SET session = ? WHERE ('login' = ?)`, [code, result[0].login],function(){
                                     addCookie(response, "session", code);
                                     resolve(1);
                                 });
@@ -172,7 +193,7 @@ app.post('/api/login', (request, response) => {
                 let code = createCode();
 
                 if(request.body.autojoin){
-                    con.query("UPDATE users SET session = ? WHERE login = ?",[code, result[0].login],function(){
+                    con.query(`UPDATE users SET 'session' = ? WHERE ('login' = ?)`, [code, result[0].login],function(){
                         addCookie(response, "session", code);
                         resolve(1);
                     });

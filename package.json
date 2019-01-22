@@ -19,6 +19,7 @@
     "helmet": "latest",
     "js-md5": "^0.7.3",
     "js-sha256": "^0.9.0",
+    "mongoose": "^5.4.6",
     "mysql": "^2.16.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",

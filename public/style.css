@@ -1,29 +1,21 @@
+.checkbox{
+    margin-left: auto;
+    margin-right: auto;
+    display: table;
+}
 #warp_user{
     padding-top: 200px;
     width: 250px;
     height: 345px;
     margin: 10px 20px;
 }
-#game-event{
-    width: 200px;
-}
 
 #warp_game{
-    float: left;
-    width: 100%;
-    height: 500px;
-    padding-top: 215px;
+    padding-top: 200px;
+    width: 300px;
     margin: auto;
 }
 
-#warp_authorization{
-	margin: 10px auto;
-	width: 500px;
-    height: 345px;
-    border-style: groove;
-    padding: 15px;
-    border-radius: 5px;     
-}
 #title_hello{
     padding-bottom: 10px;
 }
@@ -38,7 +30,7 @@
 }
 #cb-reg{
     padding-top: 0;
-    padding-right: 5px;
+    padding-right: 15px;
     float: left;
 }
 #cb-auto-auth{
@@ -61,37 +53,47 @@
     padding-right: 20px;
 }
 #button_authorization{
-    margin-top: 50px;
     height: 45px;
 }
 
-#title_error{
-
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #eee;
 }
 
-#title_game_turn {
-    margin-bottom: 0px;
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
 
-#title_game_cards {
-    margin-bottom: 0px;
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
 }
-
-#title_game_table {
-    margin-bottom: 0px;
+.form-signin .checkbox {
+    font-weight: normal;
 }
-
-#title_game_bet {
-    margin-bottom: 0px;
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
 }
-
-#title_game_bank {
-    margin-bottom: 0px;
+.form-signin .form-control:focus {
+    z-index: 2;
 }
-
-#title_coins {
-    margin-bottom: 0px;
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
-
-#button_save {
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }

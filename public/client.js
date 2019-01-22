@@ -62,7 +62,7 @@ let textError = $('#title_error');
 let textErrorSave = $('#title_error-save');
 
 $("#button_authorization").click(function(e) {
-
+    e.preventDefault();
     if(document.getElementById('cb-reg').checked){
         fetch('/api/registration', {
             method: 'POST',
@@ -236,7 +236,8 @@ $('#button_save').click(function(){
     });
 });
 
-$("#warp_authorization").mouseenter(function(){
+$("#warp_authorization").mouseenter(function(event){
+    event.preventDefault();
     if(isJoin){
         $(this).stop(true, true);
         $(this).css('margin-top', 10);
@@ -260,6 +261,7 @@ function id(){
 }
 
 function load(){
+
     $('#card1').hide();
     $('#warp_user').hide();
     $('#warp_game').hide();
@@ -268,7 +270,6 @@ function load(){
     $('#warp_authorization').animate({
         marginTop: 10
     }, 700);
-    $(".crd").classList.toggle('is-flipped');
 
     fetch('/api/autoAuth', {
         method: 'POST',

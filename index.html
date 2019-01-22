@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Игра года ебатб</title>
+    <title>Покер</title>
     <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
     <script src="jquery-1.12.4.min.js"></script>
     <script src="jquery.ui.core.min.js"></script>
@@ -10,46 +10,54 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="bootstrap.min.css" rel="stylesheet">
     <link href="./style.css" rel="stylesheet">
     <link href="cards.css" rel="stylesheet">
+
 </head>
 <body>
-    <div id="warp_authorization">
-        <h1 id="title_hello" style="text-align: center">Привет, аноним!</h1>
-        <h6 id="title_error" style="color:red;text-align: center"></h6>
-        <input id="input_login" type="text" name="login" class="form-control" placeholder="Логин" autocomplete="login">
-        <input id="input_password" type="password" name="password" class="form-control" placeholder="Пароль" autocomplete="new-password">
 
-        <div id="settings">
-            <input id="cb-reg" type="checkbox" onchange="eventReg()" /><h6 id="txt-reg">Регистрация</h6>
-            <input id="cb-auto-auth" type="checkbox"/><h6 id="txt-auto-auth">Запомнить на день</h6>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://bootstrap-3.ru/examples/navbar-fixed-top/#">Покер</a>
         </div>
-        <button id="button_authorization" class="btn btn-lg btn-primary btn-block" type="submit">Авторизация</button>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a>Играть</a></li>
+                <li><a>Профиль</a></li>
+                <li><a href="/settings" >Настройки</a></li>
+                <li><a>Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    <div id="warp_authorization" class="container">
+        <form class="form-signin" role="form">
+            <h1 id="title_hello" style="text-align: center">Привет, аноним!</h1>
+            <h6 id="title_error" style="color:red;text-align: center">&ensp;</h6>
+            <input id="input_login" type="login" name="login" class="form-control" placeholder="Логин" autocomplete="login">
+            <input style="margin-top: 5px" id="input_password" type="password" name="password" class="form-control" placeholder="Пароль" autocomplete="new-password">
+            <label class="checkbox"><input id="cb-reg" onchange="eventReg()" type="checkbox" value="remember-me">Регистрация&emsp;&emsp;&emsp;</label>
+            <label class="checkbox"><input id="cb-auto-auth" type="checkbox" value="remember-me">Запомнить на день</label>
+            <button id="button_authorization" class="btn btn-lg btn-primary btn-block" type="submit">Авторизация</button>
+        </form>
     </div>
 
-    <div id="warp_user">
-        <h4 id="title_coins">Коины: </h4>
-        <h6 id="title_error_save" style="color:red;text-align: center;margin-top: 2px;margin-bottom: 0px;"></h6>
-        <h6 style="margin-bottom: 0;margin-top: 1px;" >Имя: </h6>
-        <input id="input_name" type="text" class="form-control" placeholder="Ваше имя" required="true" autofocus="" autocomplete="on">
-        <h6 style="margin-bottom: 0;" >Логин: </h6>
-        <input id="input_new_login" type="text" class="form-control" placeholder="Ваш логин" required="true" autofocus="" autocomplete="on">
-        <h6 style="margin-bottom: 0;">Новый пароль (не обязательно):</h6>
-        <input id="input_new_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
-        <h6 style="margin-bottom: 0px;" >Старый пароль (обязательно):</h6>
-        <input id="input_old_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
-        <h4></h4>
-        <button id="button_save" class="btn btn-lg btn-primary btn-block" type="submit">Сохранить</button>
-    </div>
-
-    <div id="warp_game">
+    <div id="warp_game" class = "container">
         <h4 id="title_game_bank">Банк:  </h4>
         <h4 id="title_game_bet">Ставки игроков: </h4>
         <h4 id="title_game_table">Стол: </h4>
         <h4 id="title_game_cards">Ваши карты: </h4>
         <h4 id="title_game_turn">Ход: </h4>
         <h4> </h4>
-        <div id="table">
+        <!--<div id="table">
             <div class="scene scene--card">
                 <div class="crd">
                     <div class="crd__face crd__face--front">
@@ -95,8 +103,8 @@
                 </div>
             </div>
         </div>
-
-        <div style="padding-top: 150px" id="game-event">
+        -->
+        <div id="game-event">
             <button id="button_fold" class="btn btn-lg btn-primary btn-block" type="submit">Сбросить</button>
             <button id="button_call" class="btn btn-lg btn-primary btn-block" type="submit">Уровнять</button>
             <button id="button_check" class="btn btn-lg btn-primary btn-block" type="submit">Пропустить</button>
