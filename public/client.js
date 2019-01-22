@@ -29,9 +29,10 @@ socket.onmessage = function(event) {
         $("#title_game_bet").text("Ставки игроков: "+obg['crt-stavki']);
         $("#title_game_table").text("Стол: "+obg['cards-on-table']);
         $("#title_game_cards").text("Ваши карты: "+obg['my-cards']);
-        $("#title_game_turn").text("Ход: "+obg['crt-player']);
+        $("#title_game_turn").text("Ход игрока: "+obg['crt-player']);
     }else if(obg.type==="your-turn"){
         alert("Ваш ход!");
+        $("#title_game_turn").text("Ход: ваш");
     }
 };
 
@@ -44,18 +45,21 @@ $("#button_call").click(function(){ // Уровнять
 });
 
 $("#button_rise").click(function(){ // Поднять
-    if(/^[0-9]+$/.test($("#inp-rise").val()) && $("#inp-rise").val() > 0){
-        socket.send( JSON.stringify( {"type":"turn","turn-type": "rise", "coins": $("#inp-rise").val()}));
+    let inputRise = $("#inp-rise");
+    if(/^[0-9]+$/.test(inputRise.val()) && inputRise.val() > 0){
+        socket.send( JSON.stringify( {"type":"turn","turn-type": "rise", "coins": inputRise.val()}));
+        inputRise.val("")
     }
 });
 
 $("#button_check").click(function(){
     socket.send( JSON.stringify( {"type":"turn","turn-type": "check", "coins": null}));
+    $('#card1').delay(500).fadeIn(500);
 });
 
 
-let textError = $('#txt-error');
-let textErrorSave = $('#txt-error-save');
+let textError = $('#title_error');
+let textErrorSave = $('#title_error-save');
 
 $("#button_authorization").click(function(e) {
 
@@ -89,7 +93,7 @@ $("#button_authorization").click(function(e) {
                 textError.text("Успешно!");
                 textError.css('color','green');
 
-                $("#txt-hello").text("Привет, "+data.body.name+"!");
+                $("#title_hello").text("Привет, "+data.body.name+"!");
                 $("#input_login").val(data.body.login);
                 $("#index_password").val(data.body.password);
                 $("#button_authorization").prop('disabled', true);
@@ -108,7 +112,7 @@ $("#button_authorization").click(function(e) {
                 textError.fadeTo( 0, 0.0, function() {});
                 textError.fadeTo( 1000 , 1.0, function() {});
                 setTimeout(function tick() {
-                    $( "#txt-error" ).fadeTo( 1000 , 0.0, function() {});
+                    $( "#title_error" ).fadeTo( 1000 , 0.0, function() {});
                 }, 5000);
                 textError.text(data.body);
                 textError.css('color','red');
@@ -147,7 +151,7 @@ $("#button_authorization").click(function(e) {
                 textError.text("Успешно!");
                 textError.css('color','green');
 
-                $("#txt-hello").text("Привет, "+data.body.name+"!");
+                $("#title_hello").text("Привет, "+data.body.name+"!");
                 $("#input_login").val(data.body.login);
                 $("#index_password").val(data.body.password);
                 $("#button_authorization").prop('disabled', true);
@@ -166,7 +170,7 @@ $("#button_authorization").click(function(e) {
                 textError.fadeTo( 0, 0.0, function() {});
                 textError.fadeTo( 1000 , 1.0, function() {});
                 setTimeout(function tick() {
-                    $( "#txt-error" ).fadeTo( 1000 , 0.0, function() {});
+                    $( "#title_error" ).fadeTo( 1000 , 0.0, function() {});
                 }, 5000);
                 textError.text(data.body);
                 textError.css('color','red');
@@ -256,7 +260,7 @@ function id(){
 }
 
 function load(){
-
+    $('#card1').hide();
     $('#warp_user').hide();
     $('#warp_game').hide();
     $('#input_new_password').val("");
@@ -264,6 +268,7 @@ function load(){
     $('#warp_authorization').animate({
         marginTop: 10
     }, 700);
+    $(".crd").classList.toggle('is-flipped');
 
     fetch('/api/autoAuth', {
         method: 'POST',
@@ -278,7 +283,7 @@ function load(){
     }).then(function(data) {
         console.log("Код:"+data.code+"Сообщение:"+data.body);
         if(data.code === 200){
-            $("#txt-hello").text("Привет, "+data.body.name+"!");
+            $("#title_hello").text("Привет, "+data.body.name+"!");
             $('#input_name').val(data.body.name);
             $('#input_new_login').val(data.body.login);
             $('#input_login').val(data.body.login);
@@ -308,3 +313,7 @@ function eventReg() {
         $('#button_authorization').text("Авторизация");
     }
 }
+
+$('.crd').click(function () {
+    (this).classList.toggle('is-flipped');
+});

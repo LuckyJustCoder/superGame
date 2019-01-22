@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node server.js"
   },
-  "author": "",
+  "author": "Reterer, LuckyCoder",
   "license": "ISC",
   "dependencies": {
     "basic": "^2.0.3",

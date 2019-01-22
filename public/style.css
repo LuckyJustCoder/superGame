@@ -1,42 +1,21 @@
-#button_fold{
-    width: 150px;
-}
-#button_call{
-    width: 150px;
-}
-#button_check{
-    width: 150px;
-}
-#button_rise{
-    width: 150px;
-    position: absolute;
-    margin: -45px 180px;
-}
-#inp-rise{
-    width: 150px;
-    height: 45px;
-    position: absolute;
-    margin: -95px 180px;
-}
 #warp_user{
     padding-top: 200px;
     width: 250px;
     height: 345px;
     margin: 10px 20px;
-    position: absolute;
+}
+#game-event{
+    width: 200px;
 }
 
 #warp_game{
-    width: 500px;
+    float: left;
+    width: 100%;
     height: 500px;
     padding-top: 215px;
     margin: auto;
 }
-#wrp-table{
-    width: 1280px;
-    height: 720px;
-    margin: 160px auto;
-}
+
 #warp_authorization{
 	margin: 10px auto;
 	width: 500px;
@@ -45,13 +24,12 @@
     padding: 15px;
     border-radius: 5px;     
 }
-#txt-hello{
+#title_hello{
     padding-bottom: 10px;
 }
 #input_login{
     padding-bottom: 10px;
 }
-
 #settings{
     padding-top: 10px;
     height: 10px;
@@ -84,9 +62,10 @@
 }
 #button_authorization{
     margin-top: 50px;
-    height: 45;
+    height: 45px;
 }
-#txt-error{
+
+#title_error{
 
 }
 

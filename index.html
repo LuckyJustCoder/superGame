@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
     <link href="./style.css" rel="stylesheet">
+    <link href="cards.css" rel="stylesheet">
 </head>
 <body>
     <div id="warp_authorization">
-        <h1 id="txt-hello" style="text-align: center">Привет, аноним!</h1>
-        <h6 id="txt-error" style="color:red;text-align: center"></h6>
-        <input type="text" name="login" id="input_login" class="form-control" placeholder="Логин" autocomplete="login">
-        <input type="password" name="password" id="input_password" class="form-control" placeholder="Пароль" autocomplete="new-password">
+        <h1 id="title_hello" style="text-align: center">Привет, аноним!</h1>
+        <h6 id="title_error" style="color:red;text-align: center"></h6>
+        <input id="input_login" type="text" name="login" class="form-control" placeholder="Логин" autocomplete="login">
+        <input id="input_password" type="password" name="password" class="form-control" placeholder="Пароль" autocomplete="new-password">
+
         <div id="settings">
             <input id="cb-reg" type="checkbox" onchange="eventReg()" /><h6 id="txt-reg">Регистрация</h6>
             <input id="cb-auto-auth" type="checkbox"/><h6 id="txt-auto-auth">Запомнить на день</h6>
@@ -28,18 +29,19 @@
 
     <div id="warp_user">
         <h4 id="title_coins">Коины: </h4>
-        <h6 id="txt-error-save" style="color:red;text-align: center;margin-top: 2px;margin-bottom: 0px;"></h6>
+        <h6 id="title_error_save" style="color:red;text-align: center;margin-top: 2px;margin-bottom: 0px;"></h6>
         <h6 style="margin-bottom: 0;margin-top: 1px;" >Имя: </h6>
-        <input type="text" id="input_name" class="form-control" placeholder="Ваше имя" required="true" autofocus="" autocomplete="on">
+        <input id="input_name" type="text" class="form-control" placeholder="Ваше имя" required="true" autofocus="" autocomplete="on">
         <h6 style="margin-bottom: 0;" >Логин: </h6>
-        <input type="text" id="input_new_login" class="form-control" placeholder="Ваш логин" required="true" autofocus="" autocomplete="on">
+        <input id="input_new_login" type="text" class="form-control" placeholder="Ваш логин" required="true" autofocus="" autocomplete="on">
         <h6 style="margin-bottom: 0;">Новый пароль (не обязательно):</h6>
-        <input type="password" id="input_new_password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
+        <input id="input_new_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
         <h6 style="margin-bottom: 0px;" >Старый пароль (обязательно):</h6>
-        <input type="password" id="input_old_password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
+        <input id="input_old_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
         <h4></h4>
         <button id="button_save" class="btn btn-lg btn-primary btn-block" type="submit">Сохранить</button>
     </div>
+
     <div id="warp_game">
         <h4 id="title_game_bank">Банк:  </h4>
         <h4 id="title_game_bet">Ставки игроков: </h4>
@@ -47,11 +49,60 @@
         <h4 id="title_game_cards">Ваши карты: </h4>
         <h4 id="title_game_turn">Ход: </h4>
         <h4> </h4>
-        <button id="button_fold" class="btn btn-lg btn-primary btn-block" type="submit">Сбросить</button>
-        <button id="button_call" class="btn btn-lg btn-primary btn-block" type="submit">Уровнять</button>
-        <button id="button_check" class="btn btn-lg btn-primary btn-block" type="submit">Пропустить</button>
-        <input type="text" id="inp-rise" class="form-control" placeholder="Поднять на..." required="true" autofocus="" autocomplete="off">
-        <button id="button_rise" class="btn btn-lg btn-primary btn-block" type="submit">Поднять</button>
+        <div id="table">
+            <div class="scene scene--card">
+                <div class="crd">
+                    <div class="crd__face crd__face--front">
+                        <div class="card">
+                            <div class="front">
+                                <div class="index">5<br>♣</div>
+                                <div class="spotA1">♣</div>
+                                <div class="spotA3">♣</div>
+                                <div class="spotA5">♣</div>
+                                <div class="spotB2">♣</div>
+                                <div class="spotB4">♣</div>
+                                <div class="spotC1">♣</div>
+                                <div class="spotC3">♣</div>
+                                <div class="spotC5">♣</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crd__face crd__face--back">
+                        <div class="card"></div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-left: 150px" class="scene scene--card">
+                <div class="crd">
+                    <div class="crd__face crd__face--front">
+                        <div class="card">
+                            <div class="front">
+                                <div id = "card-1" class="index">8<br>♣</div>
+                                <div class="spotA1">♣</div>
+                                <div class="spotA3">♣</div>
+                                <div class="spotA5">♣</div>
+                                <div class="spotB2">♣</div>
+                                <div class="spotB4">♣</div>
+                                <div class="spotC1">♣</div>
+                                <div class="spotC3">♣</div>
+                                <div class="spotC5">♣</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crd__face crd__face--back">
+                        <div class="card"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-top: 150px" id="game-event">
+            <button id="button_fold" class="btn btn-lg btn-primary btn-block" type="submit">Сбросить</button>
+            <button id="button_call" class="btn btn-lg btn-primary btn-block" type="submit">Уровнять</button>
+            <button id="button_check" class="btn btn-lg btn-primary btn-block" type="submit">Пропустить</button>
+            <input type="text" id="inp-rise" class="form-control" placeholder="Поднять на..." required="true" autofocus="" autocomplete="off">
+            <button id="button_rise" class="btn btn-lg btn-primary btn-block" type="submit">Поднять</button>
+        </div>
     </div>
     <script src="client.js"></script>
 </body>
