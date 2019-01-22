@@ -60,11 +60,48 @@ function createCode(){
     let code = "";
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for (let i = 0; i < 10; i++){
-        code +=  sha256(possible.charAt(Math.floor(Math.random() * possible.length)));
+    for (let i = 0; i < 5; i++){
+        code +=  possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    return code;
+    return sha256(code);
 }
+
+app.post('/api/logout', function(request, response) {
+
+    let login = request.cookies['login'];
+
+    con.query(`SELECT * FROM users WHERE login = ?`,[login], function (error, result) {
+        try {
+            if(error){
+                response.send(JSON.stringify({body: `Ошибка: ${error.code} => ${error.sqlMessage}`, code: error.code}));
+                return false;
+            }
+
+            new Promise(function (resolve) {
+                let code = "null";
+                con.query(`UPDATE users SET session = '${code}' WHERE (login = '${login}')`, function(error){
+                    if(error){
+                        response.send(JSON.stringify({body: `Ошибка: ${error.code} => ${error.sqlMessage}`, code: 500}));
+                        return false;
+                    }
+                    resolve(1);
+                });
+            }).then(function () {
+                new Promise(function (resolve) {
+                    addCookie(response, "login", login);
+                    addCookie(response, "session", "0");
+                    resolve(1);
+                }).then(function () {
+                    response.send(JSON.stringify({body:result[0], code: 200}));
+                    return false;
+                });
+            });
+        }catch(e) {
+            response.send(JSON.stringify({body:"true", code: 200}));
+            return false;
+        }
+    });
+});
 
 app.post('/api/autoAuth', (request, response) => {
 
@@ -84,7 +121,11 @@ app.post('/api/autoAuth', (request, response) => {
 
             let code = createCode();
             new Promise(function (resolve) {
-                con.query(`UPDATE users SET 'session' = ? WHERE ('login' = ?)`, [code, login],function(){
+                con.query(`UPDATE users SET session = '${code}' WHERE (login = '${login}')`, function(error){
+                    if(error){
+                        response.send(JSON.stringify({body: `Ошибка: ${error.code} => ${error.sqlMessage}`, code: 500}));
+                        return false;
+                    }
                     resolve(1);
                 });
             }).then(function () {
@@ -193,7 +234,11 @@ app.post('/api/login', (request, response) => {
                 let code = createCode();
 
                 if(request.body.autojoin){
-                    con.query(`UPDATE users SET 'session' = ? WHERE ('login' = ?)`, [code, result[0].login],function(){
+                    con.query(`UPDATE users SET session = '${code}' WHERE (login = '${result[0].login}')`, function(error){
+                        if(error){
+                            response.send(JSON.stringify({body: `Ошибка: ${error.code} => ${error.sqlMessage}`, code: 500}));
+                            return false;
+                        }
                         addCookie(response, "session", code);
                         resolve(1);
                     });

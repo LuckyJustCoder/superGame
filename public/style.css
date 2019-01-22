@@ -4,10 +4,11 @@
     display: table;
 }
 #warp_user{
-    padding-top: 200px;
-    width: 250px;
-    height: 345px;
-    margin: 10px 20px;
+    padding-top: 35px;
+}
+
+#warp_authorization{
+    width: 500px;
 }
 
 #warp_game{

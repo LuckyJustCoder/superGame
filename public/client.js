@@ -14,7 +14,7 @@ socket.onmessage = function(event) {
     console.log(obg);
     if(obg.type==="login-status"){
         if(obg.message==="ok"){
-            $("#warp_game").show();
+
             socket.send( JSON.stringify({
                 type: "join-to-game",
                 seat: 0,
@@ -108,6 +108,9 @@ $("#button_authorization").click(function(e) {
                     $("#warp_user").show();
                     socket.send( JSON.stringify({"type": "login","login": data.body.login, "password": data.body.password}));
                 }, 1500);
+                setTimeout(function(){
+                    $("#warp_game").show();
+                }, 1600);
             }else{
                 textError.fadeTo( 0, 0.0, function() {});
                 textError.fadeTo( 1000 , 1.0, function() {});
@@ -166,6 +169,9 @@ $("#button_authorization").click(function(e) {
                     $("#warp_user").show();
                     socket.send( JSON.stringify({"type": "login","login": data.body.login, "password": data.body.password}));
                 }, 1500);
+                setTimeout(function(){
+                    $("#warp_game").show();
+                }, 1600)
             }else{
                 textError.fadeTo( 0, 0.0, function() {});
                 textError.fadeTo( 1000 , 1.0, function() {});
@@ -189,7 +195,28 @@ $("#button_authorization").click(function(e) {
     }catch (e) {
     }
 });
+function leave(){
 
+    fetch('/api/logout', {
+        method: 'POST',
+    })
+        .then(function(response) {
+            if (!response.ok) {
+                return Promise.reject(new Error(
+                    'Response failed: ' + response.status + ' (' + response.statusText + ')'
+                ));
+            }
+            return response.json();
+        }).then(function(data) {
+            console.log(data);
+            if(data.code === 200){
+                load();
+            }
+
+    }).catch(function(error) {
+        console.log(error);
+    });
+}
 $('#button_save').click(function(){
     fetch('/api/changedata', {
         method: 'POST',
@@ -254,8 +281,8 @@ function id(){
             }, 700);
 
             setTimeout(function(){
-                $("#warp_user").show();
-            }, 300);
+                $("#warp_game").show();
+            }, 700);
         }
     }, 1000);
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Покер</title>
     <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
     <script src="jquery-1.12.4.min.js"></script>
     <script src="jquery.ui.core.min.js"></script>
@@ -26,32 +26,33 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://bootstrap-3.ru/examples/navbar-fixed-top/#">Покер</a>
+            <a class="navbar-brand" href="/">♣Покер♣</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Играть</a></li>
                 <li><a>Профиль</a></li>
                 <li class="active"><a>Настройки</a></li>
-                <li><a>Выйти</a></li>
+                <li><a onclick="leave()">Выйти</a></li>
             </ul>
         </div>
     </div>
 </div>
 
-<div id="warp_user">
-    <h4 id="title_coins">Коины: </h4>
-    <h6 id="title_error_save" style="color:red;text-align: center;margin-top: 2px;margin-bottom: 0px;"></h6>
-    <h6 style="margin-bottom: 0;margin-top: 1px;" >Имя: </h6>
-    <input id="input_name" type="text" class="form-control" placeholder="Ваше имя" required="true" autofocus="" autocomplete="on">
-    <h6 style="margin-bottom: 0;" >Логин: </h6>
-    <input id="input_new_login" type="text" class="form-control" placeholder="Ваш логин" required="true" autofocus="" autocomplete="on">
-    <h6 style="margin-bottom: 0;">Новый пароль (не обязательно):</h6>
-    <input id="input_new_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
-    <h6 style="margin-bottom: 0px;" >Старый пароль (обязательно):</h6>
-    <input id="input_old_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
-    <h4></h4>
-    <button id="button_save" class="btn btn-lg btn-primary btn-block" type="submit">Сохранить</button>
+<div id="warp_user" class="container">
+    <form class="form-signin" role="form">
+        <h6 id="title_error_save" style="color:red;text-align: center;margin-top: 2px;margin-bottom: 0px;"></h6>
+        <h6 style="margin-bottom: 0;margin-top: 1px;" >Имя: </h6>
+        <input id="input_name" type="text" class="form-control" placeholder="Ваше имя" required="true" autofocus="" autocomplete="on">
+        <h6 style="margin-bottom: 0;" >Логин: </h6>
+        <input id="input_new_login" type="text" class="form-control" placeholder="Ваш логин" required="true" autofocus="" autocomplete="on">
+        <h6 style="margin-bottom: 0;">Новый пароль (не обязательно):</h6>
+        <input id="input_new_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
+        <h6 style="margin-bottom: 0px;" >Старый пароль (обязательно):</h6>
+        <input id="input_old_password" type="password" class="form-control" placeholder="Пароль" required="true" autofocus="" autocomplete="on">
+        <h4></h4>
+        <button id="button_save" class="btn btn-lg btn-primary btn-block" type="submit">Сохранить</button>
+    </form>
 </div>
 </body>
 </html>
