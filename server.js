@@ -186,14 +186,10 @@ app.post('/api/registration', (request, response) => {
                         new Promise(function (resolve) {
                             let code = createCode();
 
-                            if(request.body.autojoin){
-                                con.query(`UPDATE users SET session = ? WHERE ('login' = ?)`, [code, result[0].login],function(){
-                                    addCookie(response, "session", code);
-                                    resolve(1);
-                                });
-                            }else{
+                            con.query(`UPDATE users SET session = ? WHERE ('login' = ?)`, [code, result[0].login],function(){
+                                addCookie(response, "session", code);
                                 resolve(1);
-                            }
+                            });
                         }).then(function() {
                             addCookie(response, "login", result[0].login);
 
@@ -233,18 +229,14 @@ app.post('/api/login', (request, response) => {
             new Promise(function (resolve) {
                 let code = createCode();
 
-                if(request.body.autojoin){
-                    con.query(`UPDATE users SET session = '${code}' WHERE (login = '${result[0].login}')`, function(error){
-                        if(error){
-                            response.send(JSON.stringify({body: `Ошибка: ${error.code} => ${error.sqlMessage}`, code: 500}));
-                            return false;
-                        }
-                        addCookie(response, "session", code);
-                        resolve(1);
-                    });
-                }else{
+                con.query(`UPDATE users SET session = '${code}' WHERE (login = '${result[0].login}')`, function(error){
+                    if(error){
+                        response.send(JSON.stringify({body: `Ошибка: ${error.code} => ${error.sqlMessage}`, code: 500}));
+                        return false;
+                    }
+                    addCookie(response, "session", code);
                     resolve(1);
-                }
+                });
             }).then(function() {
                 addCookie(response, "login", result[0].login);
 
